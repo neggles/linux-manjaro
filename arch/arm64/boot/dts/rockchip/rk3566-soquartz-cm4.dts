@@ -70,6 +70,10 @@
 	};
 };
 
+&hdmi_sound {
+	status = "okay";
+};
+
 /*
  * i2c1 is exposed on CM1 / Module1A
  * pin 80 - SCL0 - i2c1_scl_m0, pullup to vcc3v3_pmu
@@ -129,6 +133,10 @@
  * pin 50 - GPIO17 - i2s1_mclk_m1
  * pin 56 - GPIO3  - i2s1_sdo3_m1, shared with i2c2
  */
+&i2s0_8ch {
+	status = "okay";
+};
+
 &i2s1_8ch {
 	status = "disabled";
 };
