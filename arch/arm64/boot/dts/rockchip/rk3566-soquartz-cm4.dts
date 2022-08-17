@@ -8,6 +8,17 @@
 	model = "Pine64 RK3566 SoQuartz with CM4-IO Carrier Board";
 	compatible = "pine64,soquartz-cm4io", "pine64,soquartz", "rockchip,rk3566";
 
+	hdmi-con {
+		compatible = "hdmi-connector";
+		type = "a";
+
+		port {
+			hdmi_con_in: endpoint {
+				remote-endpoint = <&hdmi_out_con>;
+			};
+		};
+	};
+
 	/* labeled +12v in schematic */
 	vcc12v_dcin: vcc12v-dcin-regulator {
 		compatible = "regulator-fixed";
@@ -47,6 +58,16 @@
 
 &gmac1 {
 	status = "okay";
+};
+
+&hdmi {
+	status = "okay";
+};
+
+&hdmi_out {
+	hdmi_out_con: endpoint {
+		remote-endpoint = <&hdmi_con_in>;
+	};
 };
 
 /*
@@ -194,4 +215,16 @@
 
 &vbus {
 	vin-supply = <&vcc_5v>;
+};
+
+&vop {
+	status = "okay";
+};
+
+&vop_mmu {
+	status = "okay";
+};
+
+&vp0_out_hdmi {
+	remote-endpoint = <&hdmi_in_vp0>;
 };
