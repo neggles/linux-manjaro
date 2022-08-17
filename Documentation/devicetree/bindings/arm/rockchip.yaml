@@ -475,6 +475,11 @@ properties:
           - const: rockchip,rk3399-orangepi
           - const: rockchip,rk3399
 
+      - description: Orange Pi 4 LTS
+        items:
+          - const: orangpi,rk3399-orangepi-4-lts
+          - const: rockchip,rk3399
+
       - description: Phytec phyCORE-RK3288 Rapid Development Kit
         items:
           - const: phytec,rk3288-pcm-947
