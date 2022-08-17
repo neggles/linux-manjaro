@@ -437,6 +437,13 @@
 			};
 		};
 	};
+
+	eeprom@50 {
+		compatible = "belling,bl24c16a", "atmel,24c16";
+		reg = <0x50>;
+		num-addresses = <8>;
+		pagesize = <16>;
+	};
 };
 
 /* i2c2_m1 exposed on csi port, pulled up to vcc_3v3 */
