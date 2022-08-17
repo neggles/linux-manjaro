@@ -491,8 +491,7 @@ void drm_sched_start(struct drm_gpu_scheduler *sched, bool full_recovery)
 			if (r == -ENOENT)
 				drm_sched_job_done(s_job);
 			else if (r)
-				DRM_DEV_ERROR(sched->dev, "fence add callback failed (%d)\n",
-					  r);
+				DRM_DEV_ERROR(sched->dev, "Failed to add fence callback: %d\n", r);
 		} else
 			drm_sched_job_done(s_job);
 	}
@@ -915,7 +914,7 @@ static int drm_sched_main(void *param)
 	struct drm_gpu_scheduler *sched = (struct drm_gpu_scheduler *)param;
 	int r;
 
-	sched_set_fifo_low(current);
+	sched_set_fifo(current);
 
 	while (!kthread_should_stop()) {
 		struct drm_sched_entity *entity = NULL;
@@ -960,13 +959,11 @@ static int drm_sched_main(void *param)
 			if (r == -ENOENT)
 				drm_sched_job_done(sched_job);
 			else if (r)
-				DRM_DEV_ERROR(sched->dev, "fence add callback failed (%d)\n",
-					  r);
+				DRM_DEV_ERROR(sched->dev, "Failed to add fence callback: %d\n", r);
 			dma_fence_put(fence);
 		} else {
 			if (IS_ERR(fence))
 				dma_fence_set_error(&s_fence->finished, PTR_ERR(fence));
-
 			drm_sched_job_done(sched_job);
 		}
 
@@ -1022,7 +1019,7 @@ int drm_sched_init(struct drm_gpu_scheduler *sched,
 	if (IS_ERR(sched->thread)) {
 		ret = PTR_ERR(sched->thread);
 		sched->thread = NULL;
-		DRM_DEV_ERROR(sched->dev, "Failed to create scheduler for %s.\n", name);
+		DRM_DEV_ERROR(sched->dev, "Failed to create scheduler for %s: %d\n", name, ret);
 		return ret;
 	}
 

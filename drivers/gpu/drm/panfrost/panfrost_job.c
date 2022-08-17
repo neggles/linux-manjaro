@@ -234,7 +234,7 @@ static void panfrost_job_hw_submit(struct panfrost_job *job, int js)
 	if (!atomic_read(&pfdev->reset.pending)) {
 		job_write(pfdev, JS_COMMAND_NEXT(js), JS_COMMAND_START);
 		dev_dbg(pfdev->dev,
-			"JS: Submitting atom %p to js[%d][%d] with head=0x%llx AS %d",
+			"Job slot: submitting atom %p to js[%d][%d] with head=0x%llx, as=%d\n",
 			job, js, subslot, jc_head, cfg & 0xf);
 	}
 	spin_unlock(&pfdev->js->job_lock);
@@ -404,12 +404,12 @@ static void panfrost_job_handle_err(struct panfrost_device *pfdev,
 	bool signal_fence = true;
 
 	if (!panfrost_exception_is_fault(js_status)) {
-		dev_dbg(pfdev->dev, "js event, js=%d, status=%s, head=0x%x, tail=0x%x",
+		dev_dbg(pfdev->dev, "Job slot event: js=%d, status=%s, head=0x%x, tail=0x%x\n",
 			js, exception_name,
 			job_read(pfdev, JS_HEAD_LO(js)),
 			job_read(pfdev, JS_TAIL_LO(js)));
 	} else {
-		dev_err(pfdev->dev, "js fault, js=%d, status=%s, head=0x%x, tail=0x%x",
+		dev_err(pfdev->dev, "Job slot fault: js=%d, status=%s, head=0x%x, tail=0x%x\n",
 			js, exception_name,
 			job_read(pfdev, JS_HEAD_LO(js)),
 			job_read(pfdev, JS_TAIL_LO(js)));
@@ -650,7 +650,7 @@ panfrost_reset(struct panfrost_device *pfdev,
 				 10, 10000);
 
 	if (ret)
-		dev_err(pfdev->dev, "Soft-stop failed\n");
+		dev_err(pfdev->dev, "Failed to complete soft-stop: %d\n", ret);
 
 	/* Handle the remaining interrupts before we reset. */
 	panfrost_job_handle_irqs(pfdev);
@@ -719,7 +719,7 @@ static enum drm_gpu_sched_stat panfrost_job_timedout(struct drm_sched_job
 	if (dma_fence_is_signaled(job->done_fence))
 		return DRM_GPU_SCHED_STAT_NOMINAL;
 
-	dev_err(pfdev->dev, "gpu sched timeout, js=%d, config=0x%x, status=0x%x, head=0x%x, tail=0x%x, sched_job=%p",
+	dev_err(pfdev->dev, "GPU scheduler timeout: js=%d, config=0x%x, status=0x%x, head=0x%x, tail=0x%x, sched_job=%p\n",
 		js,
 		job_read(pfdev, JS_CONFIG(js)),
 		job_read(pfdev, JS_STATUS(js)),
@@ -800,7 +800,7 @@ int panfrost_job_init(struct panfrost_device *pfdev)
 					IRQF_SHARED, KBUILD_MODNAME "-job",
 					pfdev);
 	if (ret) {
-		dev_err(pfdev->dev, "failed to request job irq");
+		dev_err(pfdev->dev, "Failed to request job IRQ: %d\n", ret);
 		return ret;
 	}
 
@@ -818,7 +818,7 @@ int panfrost_job_init(struct panfrost_device *pfdev)
 				     pfdev->reset.wq,
 				     NULL, "pan_js", pfdev->dev);
 		if (ret) {
-			dev_err(pfdev->dev, "Failed to create scheduler: %d.", ret);
+			dev_err(pfdev->dev, "Failed to create scheduler: %d\n", ret);
 			goto err_sched;
 		}
 	}
