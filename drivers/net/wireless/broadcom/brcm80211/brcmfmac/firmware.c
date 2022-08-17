@@ -599,12 +599,16 @@ static char *brcm_alt_fw_path(const char *path, const char *board_type)
 	char alt_path[BRCMF_FW_NAME_LEN];
 	char suffix[5];
 
+	/* USB probing provides no board type */
+	if (!board_type)
+		return NULL;
+
 	strscpy(alt_path, path, BRCMF_FW_NAME_LEN);
 	/* At least one character + suffix */
 	if (strlen(alt_path) < 5)
 		return NULL;
 
-	/* strip .txt or .bin at the end */
+	/* Strip .txt or .bin at the end */
 	strscpy(suffix, alt_path + strlen(alt_path) - 4, 5);
 	alt_path[strlen(alt_path) - 4] = 0;
 	strlcat(alt_path, ".", BRCMF_FW_NAME_LEN);
