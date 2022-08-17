@@ -20,6 +20,14 @@
 	};
 };
 
+&i2s2 {
+	status = "okay";
+};
+
 &mmc0 {
 	broken-cd;		/* card detect is broken on *some* boards */
+};
+
+&sound_hdmi {
+	status = "okay";
 };

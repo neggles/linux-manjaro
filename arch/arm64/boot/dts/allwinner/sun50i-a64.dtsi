@@ -163,7 +163,7 @@
 			format = "i2s";
 			frame-master = <&link0_cpu>;
 			bitclock-master = <&link0_cpu>;
-			mclk-fs = <128>;
+			mclk-fs = <256>;
 
 			link0_cpu: cpu {
 				sound-dai = <&dai>;
@@ -916,6 +916,24 @@
 			status = "disabled";
 		};
 
+		sound_hdmi: sound_hdmi {
+			compatible = "simple-audio-card";
+			simple-audio-card,format = "i2s";
+			simple-audio-card,name = "allwinner-hdmi";
+			simple-audio-card,mclk-fs = <256>;
+			status = "disabled";
+
+			simple-audio-card,codec {
+				sound-dai = <&hdmi>;
+			};
+
+			simple-audio-card,cpu {
+				sound-dai = <&i2s2>;
+				dai-tdm-slot-num = <2>;
+				dai-tdm-slot-width = <32>;
+			};
+		};
+
 		dai: dai@1c22c00 {
 			#sound-dai-cells = <0>;
 			compatible = "allwinner,sun50i-a64-codec-i2s";
@@ -1220,6 +1238,7 @@
 		};
 
 		hdmi: hdmi@1ee0000 {
+			#sound-dai-cells = <0>;
 			compatible = "allwinner,sun50i-a64-dw-hdmi",
 				     "allwinner,sun8i-a83t-dw-hdmi";
 			reg = <0x01ee0000 0x10000>;
