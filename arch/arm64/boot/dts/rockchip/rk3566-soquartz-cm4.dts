@@ -28,6 +28,21 @@
 		regulator-max-microvolt = <5000000>;
 		vin-supply = <&vcc12v_dcin>;
 	};
+
+	/* labeled +3.3v For PCIe only in schematic */
+	vcc3v3_pcie: vcc3v3-pcie-regulator {
+		compatible = "regulator-fixed";
+		regulator-name = "vcc3v3_pcie";
+		regulator-always-on;
+		regulator-boot-on;
+		regulator-min-microvolt = <3300000>;
+		regulator-max-microvolt = <3300000>;
+		vin-supply = <&vcc12v_dcin>;
+	};
+};
+
+&combphy2 {
+	status = "okay";
 };
 
 &gmac1 {
@@ -102,6 +117,11 @@
 };
 
 &led_work {
+	status = "okay";
+};
+
+&pcie2x1 {
+	vpcie3v3-supply = <&vcc3v3_pcie>;
 	status = "okay";
 };
 
