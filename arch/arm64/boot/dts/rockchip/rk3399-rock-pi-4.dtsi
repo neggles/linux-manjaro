@@ -525,6 +525,7 @@
 	vpcie0v9-supply = <&vcc_0v9>;
 	vpcie1v8-supply = <&vcc_1v8>;
 	vpcie3v3-supply = <&vcc3v3_pcie>;
+	bus-scan-delay-ms = <1000>;
 	status = "okay";
 };
 
