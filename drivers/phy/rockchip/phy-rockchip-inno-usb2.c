@@ -1164,6 +1164,9 @@ static int rockchip_usb2phy_otg_port_init(struct rockchip_usb2phy *rphy,
 			dev_err(rphy->dev, "register USB HOST notifier failed\n");
 	}
 
+	/* do initial sync of usb state */
+	ret = property_enabled(rphy->grf, &rport->port_cfg->utmi_id);
+	extcon_set_state_sync(rphy->edev, EXTCON_USB_HOST, !ret);
 out:
 	return ret;
 }
