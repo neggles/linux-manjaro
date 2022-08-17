@@ -203,6 +203,10 @@
 	};
 };
 
+&hdmi_sound {
+	status = "okay";
+};
+
 &i2c0 {
 	status = "okay";
 
@@ -476,6 +480,10 @@
  */
 &i2c5 {
 	status = "disabled";
+};
+
+&i2s0_8ch {
+	status = "okay";
 };
 
 &mdio1 {
