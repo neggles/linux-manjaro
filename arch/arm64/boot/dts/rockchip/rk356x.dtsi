@@ -687,6 +687,9 @@
 		compatible = "rockchip,rk3568-dw-hdmi";
 		reg = <0x0 0xfe0a0000 0x0 0x20000>;
 		interrupts = <GIC_SPI 45 IRQ_TYPE_LEVEL_HIGH>;
+		assigned-clocks = <&cru CLK_RTC_32K>, <&cru CLK_HDMI_CEC>;
+		assigned-clocks-parents = <&cru CLK_RTC32K_FRAC>, <&cru CLK_RTC_32K>;
+		assigned-clock-rates = <32768>, <32768>;
 		clocks = <&cru PCLK_HDMI_HOST>,
 			 <&cru CLK_HDMI_SFR>,
 			 <&cru CLK_HDMI_CEC>,
